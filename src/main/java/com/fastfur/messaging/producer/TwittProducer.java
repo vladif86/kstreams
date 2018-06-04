@@ -1,25 +1,40 @@
 package com.fastfur.messaging.producer;
 
+import com.fastfur.messaging.data.Tweet;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
-public class TwittProducer {
+import java.util.List;
+import java.util.Properties;
+
+public class TwittProducer extends BaseProducer{
 
     private Twitter twitter;
 
     public TwittProducer(){
         TwitterFactory tf= init();
         this.twitter = tf.getInstance();
+        initProps();
+        producer = new KafkaProducer(properties);
+
 
     }
 
-    public void searchTwitts() throws Exception{
-        Query query = new Query("check");
-        QueryResult result = twitter.search(query);
-        for (Status status : result.getTweets()) {
-            System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
+    public void produceTweets(String topic,String query) throws Exception{
+        for(Status status: searchTwitts()){
+            produce( new Tweet(createUUID(), status), topic );
         }
 
+    }
+
+
+
+
+    public List<Status> searchTwitts(String queryString) throws Exception{
+        Query query = new Query(queryString);
+        QueryResult result = twitter.search(query);
+        return result.getTweets();
     }
 
     public static void main(String[] args) throws Exception{
@@ -35,9 +50,13 @@ public class TwittProducer {
                 .setOAuthAccessTokenSecret("N4lWvSFfO2hMdNK1NpzgT6q3GUEd6ai28zz938QxYs5kX");
         TwitterFactory tf = new TwitterFactory( cb.build() );
         return tf;
+    }
 
-
-
+    public Properties initProps(){
+        super.initProps();
+        properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        properties.put("value.serializer", "com.elad.kstream.childdemo.serde.ChildSerializer");
+        return properties;
 
     }
 
