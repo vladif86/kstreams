@@ -22,7 +22,7 @@ public class TwittProducer extends BaseProducer{
     }
 
     public void produceTweets(String topic,String query) throws Exception{
-        for(Status status: searchTwitts()){
+        for(Status status: searchTwitts(query)){
             produce( new Tweet(createUUID(), status), topic );
         }
 
@@ -39,7 +39,7 @@ public class TwittProducer extends BaseProducer{
 
     public static void main(String[] args) throws Exception{
         TwittProducer tp = new TwittProducer();
-        tp.searchTwitts();
+        tp.searchTwitts("q=@realDonaldTrump");
     }
     public TwitterFactory init(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -55,7 +55,7 @@ public class TwittProducer extends BaseProducer{
     public Properties initProps(){
         super.initProps();
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        properties.put("value.serializer", "com.elad.kstream.childdemo.serde.ChildSerializer");
+        properties.put("value.serializer", "com.fastfur.messaging.serde.TweetSerializer");
         return properties;
 
     }

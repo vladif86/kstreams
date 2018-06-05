@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
 
-public class TweetSerde implements Serde<Tweet{
+public class TweetSerde implements Serde<Tweet>{
     public void configure(Map<String, ?> configs, boolean isKey) {
 
     }
