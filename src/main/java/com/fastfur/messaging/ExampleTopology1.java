@@ -9,6 +9,8 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Predicate;
+import org.apache.kafka.streams.kstream.Produced;
 
 import java.util.Properties;
 
@@ -18,7 +20,10 @@ import java.util.Properties;
 public class ExampleTopology1{
 
     public static final String INPUT_TOPIC_NAME = "twitters";
-    public static final String QUERY = "q=@realDonaldTrump";
+    public static final String QUERY = "q=TrumpKimSummit";
+    public static final String EN = "en";
+    public static final String OUTPUTTOPIC1 = "outputtopic1";
+
 
     public static void main(String[] args) throws Exception {
         TwittProducer tp = new TwittProducer();
@@ -29,12 +34,27 @@ public class ExampleTopology1{
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TweetSerde.class);
 
-
+        Predicate<String,Tweet> iPhoneSource = new Predicate<String, Tweet>() {
+            @Override
+            public boolean test(String s, Tweet tweet) {
+                return tweet.getSource().contains("iPhone");
+            }
+        };
+        Predicate<String,Tweet> androidSource = new Predicate<String, Tweet>() {
+            @Override
+            public boolean test(String s, Tweet tweet) {
+                return tweet.getSource().contains("Android");
+            }
+        };
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String,Tweet> stream = builder.stream(INPUT_TOPIC_NAME, Consumed.with(Serdes.String(), new TweetSerde()));
-        stream.foreach((k,v)->System.out.println(v.toString()));
+        KStream<String, Tweet>[] kStreams = stream.filter((k, v) -> (v.getLanguage().equals(EN)))
+                .branch(iPhoneSource, androidSource);
+        kStreams[1].foreach((k, v)->
+                System.out.println(v.getSource()));
+        kStreams[0].to(OUTPUTTOPIC1, Produced.with(Serdes.String(), new TweetSerde()));
         KafkaStreams streams = new KafkaStreams(builder.build(),config);
         streams.start();
-    }
+   }
 
 }
