@@ -80,6 +80,18 @@ public class Tweet implements Identity {
     }
 
 
+    @Override
+    public String toString() {
+        return "Tweet{" +
+                "id='" + id + '\'' +
+                ", favoriteCount=" + favoriteCount +
+                ", retweetCount=" + retweetCount +
+                ", text='" + text + '\'' +
+                ", createdAt=" + createdAt +
+                ", language='" + language + '\'' +
+                ", source='" + source + '\'' +
+                '}';
+    }
 
     @JsonIgnore
     public String getKey() {
