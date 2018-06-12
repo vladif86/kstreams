@@ -23,7 +23,7 @@ public class TwittProducer extends BaseProducer{
 
     public void produceTweets(String topic,String query) throws Exception{
         for(Status status: searchTwitts(query)){
-            produce( new Tweet(createUUID(), status), topic );
+                produce( new Tweet(createUUID(), status), topic );
         }
 
     }
@@ -39,8 +39,10 @@ public class TwittProducer extends BaseProducer{
 
     public static void main(String[] args) throws Exception{
         TwittProducer tp = new TwittProducer();
-        tp.searchTwitts("q=@realDonaldTrump");
+        tp.produceTweets("twitters","q=@realDonaldTrump");
+
     }
+
     public TwitterFactory init(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
