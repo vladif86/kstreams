@@ -1,10 +1,13 @@
 package com.fastfur.messaging.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import twitter4j.Status;
 
 import java.util.Date;
 
 public class Tweet implements Identity {
+    @JsonProperty
     private String id;
     private int favoriteCount;
     private int retweetCount;
@@ -12,6 +15,9 @@ public class Tweet implements Identity {
     private Date createdAt;
     private String language;
     private String source;
+
+
+    public Tweet(){}
 
     public Tweet(String id, Status status){
         this.id = id;
@@ -75,7 +81,7 @@ public class Tweet implements Identity {
 
 
 
-
+    @JsonIgnore
     public String getKey() {
         return id;
     }
