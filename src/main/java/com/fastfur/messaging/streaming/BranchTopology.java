@@ -17,7 +17,7 @@ import java.util.Properties;
 /**
  * Created by dimitryw on 6/12/18.
  */
-public class ExampleTopology1{
+public class BranchTopology {
 
     public static final String INPUT_TOPIC_NAME = "twitters";
     public static final String QUERY = "q=TrumpKimSummit";
@@ -26,35 +26,47 @@ public class ExampleTopology1{
 
 
     public static void main(String[] args) throws Exception {
+
         TwittProducer tp = new TwittProducer();
         tp.produceTweets(INPUT_TOPIC_NAME, QUERY);
+
         Properties config = new Properties();
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-first-tweet-ks");
-        config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.70.150:9092");
+        config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TweetSerde.class);
 
-        Predicate<String,Tweet> iPhoneSource = new Predicate<String, Tweet>() {
-            @Override
-            public boolean test(String s, Tweet tweet) {
-                return tweet.getSource().contains("iPhone");
-            }
-        };
-        Predicate<String,Tweet> androidSource = new Predicate<String, Tweet>() {
-            @Override
-            public boolean test(String s, Tweet tweet) {
-                return tweet.getSource().contains("Android");
-            }
-        };
-        
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String,Tweet> stream = builder.stream(INPUT_TOPIC_NAME, Consumed.with(Serdes.String(), new TweetSerde()));
+
+        //create two predicates for branch source of tweet
+        //iPhone as a source
+        Predicate<String,Tweet> iPhoneSource = (s, tweet) -> tweet.getSource().contains("iPhone");
+        //android as a source
+        Predicate<String,Tweet> androidSource =(s,tweet) -> tweet.getSource().contains("Android");
+
+        Predicate<String,Tweet> notIPhoneOrAndroid =(s,tweet) -> ! (tweet.getSource().contains("Android") & tweet.getSource().contains("iPhone")) ;
+
+
+
+        //create two branches based on the predefined predicates:
         KStream<String, Tweet>[] kStreams = stream.filter((k, v) -> (v.getLanguage().equals(EN)))
-                .branch(iPhoneSource, androidSource);
+                .branch(iPhoneSource, androidSource, notIPhoneOrAndroid);
+
         kStreams[1].foreach((k, v)->
                 System.out.println(v.getSource()));
+
+
+        kStreams[1].foreach((k, v)->
+                System.out.println(v.getSource()));
+
+        kStreams[2].foreach((k, v)->
+                System.out.println(v.getSource()));
+
         kStreams[0].to(OUTPUTTOPIC1, Produced.with(Serdes.String(), new TweetSerde()));
+
         KafkaStreams streams = new KafkaStreams(builder.build(),config);
+
         streams.start();
    }
 

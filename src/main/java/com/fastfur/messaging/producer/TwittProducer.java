@@ -10,6 +10,8 @@ import java.util.Properties;
 
 public class TwittProducer extends BaseProducer{
 
+    public static String TWITTER_ORIGINAL_TOPIC="twitters";
+
     private Twitter twitter;
 
     public TwittProducer(){
@@ -28,9 +30,6 @@ public class TwittProducer extends BaseProducer{
 
     }
 
-
-
-
     public List<Status> searchTwitts(String queryString) throws Exception{
         Query query = new Query(queryString);
         QueryResult result = twitter.search(query);
@@ -39,7 +38,7 @@ public class TwittProducer extends BaseProducer{
 
     public static void main(String[] args) throws Exception{
         TwittProducer tp = new TwittProducer();
-        tp.produceTweets("twitters","q=@realDonaldTrump");
+        tp.produceTweets(TWITTER_ORIGINAL_TOPIC,"q=@realDonaldTrump");
 
     }
 
@@ -61,10 +60,5 @@ public class TwittProducer extends BaseProducer{
         return properties;
 
     }
-
-
-
-
-
 
 }
