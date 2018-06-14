@@ -24,5 +24,37 @@
     Open this link above and click on *Get your free API key today*. 
     
     Follow the instructions and get the key and save it.
+    
+    
+ ## Docker Compose
+ In this workshop we'll use docker-compose to create our dockerized development environment.
+ 
+ docker-compose will start all required containers for this workshop: Kafka and Zookeeper conatiners.
+ 
+ + cd to  *./docker* folder
+ + *docker-compose up -d*
+ + check the docker are up and running : *docker ps*
+ 
+ + In order to get into Kafka container, run :
+   *docker exec -i -t container-id /bin/bash*
+ + Check if all Kafka topics have been created properly :
+ 
+       docker ps
+       docker exec -i -t zk-container-id /bin/bash
+       ifconfig  (take ZK IP)
+       docker exec -i -t kafka-container-id /bin/bash
+       $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper zk-IP
+       
+  It should print list of topics like that : 
+  
+       outputtopic1
+       outputtopic2
+       outputtopic3
+       twitters
+   
+   
+ 
+ 
+ 
      
    
