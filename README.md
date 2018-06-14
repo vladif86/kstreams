@@ -27,15 +27,30 @@
     
     
  ## Docker Compose
- In this workshop we'll use docker-compose.
+ In this workshop we'll use docker-compose to create our dockerized development environment.
  
- Docker compose will start all required dockers for this workshop: Kafka and Zookeeper dockers.
+ docker-compose will start all required containers for this workshop: Kafka and Zookeeper conatiners.
+ 
  + cd to  *./docker* folder
- + run *docker-compose up -d*
+ + *docker-compose up -d*
  + check the docker are up and running : *docker ps*
  
  + In order to get into Kafka container, run :
    *docker exec -i -t container-id /bin/bash*
+ + Check if all Kafka topics have been created properly :
+ 
+       docker ps
+       docker exec -i -t zk-container-id /bin/bash
+       ifconfig  (take ZK IP)
+       docker exec -i -t kafka-container-id /bin/bash
+       $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper zk-IP
+       
+  It should print list of topics like that : 
+  
+       outputtopic1
+       outputtopic2
+       outputtopic3
+       twitters
    
    
  
