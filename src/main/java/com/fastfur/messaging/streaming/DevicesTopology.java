@@ -1,23 +1,19 @@
-package com.fastfur.messaging.topologys;
+package com.fastfur.messaging.streaming;
 
 import com.fastfur.messaging.data.Tweet;
 import com.fastfur.messaging.producer.TwittProducer;
 import com.fastfur.messaging.serde.TweetSerde;
-import org.apache.kafka.common.protocol.types.Field;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.Consumed;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.KeyValueMapper;
 
 import java.util.Properties;
 
-import static com.fastfur.messaging.ExampleTopology1.INPUT_TOPIC_NAME;
-import static org.omg.IOP.TAG_ORB_TYPE.value;
+import static com.fastfur.messaging.streaming.ExampleTopology1.INPUT_TOPIC_NAME;
 
 public class DevicesTopology {
 

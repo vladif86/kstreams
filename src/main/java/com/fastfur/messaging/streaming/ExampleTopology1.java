@@ -1,4 +1,4 @@
-package com.fastfur.messaging;
+package com.fastfur.messaging.streaming;
 
 import com.fastfur.messaging.data.Tweet;
 import com.fastfur.messaging.producer.TwittProducer;
@@ -46,6 +46,7 @@ public class ExampleTopology1{
                 return tweet.getSource().contains("Android");
             }
         };
+        
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String,Tweet> stream = builder.stream(INPUT_TOPIC_NAME, Consumed.with(Serdes.String(), new TweetSerde()));
         KStream<String, Tweet>[] kStreams = stream.filter((k, v) -> (v.getLanguage().equals(EN)))
