@@ -5,8 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import twitter4j.Status;
 
 import java.util.Date;
+import java.util.function.Predicate;
+
+
 
 public class Tweet implements Identity {
+
+    public enum DEVICES {
+        IPHONE, ANDROID, IPAD, WEB, ELSE
+    }
+
     @JsonProperty
     private String id;
     private int favoriteCount;
@@ -96,6 +104,42 @@ public class Tweet implements Identity {
     @JsonIgnore
     public String getKey() {
         return id;
+    }
+
+    public static Predicate<Tweet> iphoneSource() {
+        return tweet -> tweet.getSource().contains("iPhone");
+    }
+
+    public static Predicate<Tweet> androidSource() {
+        return tweet -> tweet.getSource().contains("Android");
+    }
+
+    public  Predicate<Tweet> ipadSource() {
+        return tweet -> tweet.getSource().contains("Ipad");
+    }
+
+
+    public  Predicate<Tweet> webSource() {
+        return tweet -> tweet.getSource().contains("Web");
+    }
+
+    public DEVICES getDevice(){
+        if (iphoneSource().test( this ))
+            return DEVICES.IPHONE;
+        else if (androidSource().test( this ))
+            return DEVICES.ANDROID;
+        else if (ipadSource().test( this ))
+            return DEVICES.IPAD;
+        else if (webSource().test( this ))
+            return DEVICES.WEB;
+        return DEVICES.ELSE;
+
+
+
+
+
+
+
     }
 
 

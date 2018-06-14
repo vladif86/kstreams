@@ -21,25 +21,22 @@ public class DevicesTopology {
     }
 
     public static void main(String[] args) throws Exception{
-
         TwittProducer tp = new TwittProducer();
         tp.produceTweets(INPUT_TOPIC_NAME, "q=realDonaldTrump");
-
         Properties config = new Properties();
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-first-tweet-ks1");
-        config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.70.57:9092");
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TweetSerde.class);
 
 
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String,Tweet> stream = builder.stream(INPUT_TOPIC_NAME, Consumed.with(Serdes.String(), new TweetSerde()));
-
-        KTable<String,Long> kstream = stream.peek( (k,v) -> System.out.println( k + "!!!" + v ) )
-                .selectKey((k,v) -> v.getSource())
-                .peek( (k,v) -> System.out.println( k + "!!!" + v ) )
-                .groupByKey().count();
-        kstream.toStream().foreach( (k,v) -> System.out.println( k + "!!!" + v ) );
+        KTable<Tweet.DEVICES,Long> kstream = stream
+                .selectKey((k,v) -> v.getDevice())
+                .groupByKey()
+                .count();
+        kstream.toStream().foreach( (k,v) -> System.out.println( "Device-> " + k + "number -> " + v ) );
 
         KafkaStreams streams = new KafkaStreams(builder.build(),config);
         streams.start();
