@@ -24,5 +24,17 @@
     Open this link above and click on *Get your free API key today*. 
     
     Follow the instructions and get the key and save it.
+    
+    
+ ## Docker Compose
+ In this workshop we'll use docker-compose.
+ 
+ Docker compose will start all required dockers for this workshop: Kafka docker and Zookeeper.
+ + cd to  *./docker* folder
+ + run *docker-compose up -d*
+ + check the docker are up and running : *docker ps*
+ 
+ 
+ 
      
    
