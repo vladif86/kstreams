@@ -29,7 +29,7 @@
  ## Docker Compose
  In this workshop we'll use docker-compose.
  
- Docker compose will start all required dockers for this workshop: Kafka docker and Zookeeper.
+ Docker compose will start all required dockers for this workshop: Kafka and Zookeeper dockers.
  + cd to  *./docker* folder
  + run *docker-compose up -d*
  + check the docker are up and running : *docker ps*
