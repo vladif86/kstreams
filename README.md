@@ -9,13 +9,13 @@
    - In *Website* tab you can put any site URL, e.g. https://developer.twitter.com/
    - In *Callback URLs* click on *Add a Callback URL* button
    - Click on *Generate your Twitter application* button
-   - Go to the *Keys and Access Tokens" tab and click on *Create my access tocken" button
+   - Go to the *Keys and Access Tokens* tab and click on *Create my access tocken* button
    
    After this process you supposed to have 4 keys: 
    + API KEY (Consumer key)
    + API secret (Consumer secret)
-   + Access tocken
-   + Access tocken secret
+   + Access token
+   + Access token secret
    
    Save them in safe place on your laptop. We'll use all of them later on.
    
