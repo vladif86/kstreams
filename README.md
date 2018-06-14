@@ -35,7 +35,7 @@
  + check the docker are up and running : *docker ps*
  
  + In order to get into Kafka container, run :
-   *docker exec -i -t <con>  <container-id> /bin/bash*
+   *docker exec -i -t container-id /bin/bash*
    
    
  
