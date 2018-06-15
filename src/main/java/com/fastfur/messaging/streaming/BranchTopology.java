@@ -49,12 +49,13 @@ public class BranchTopology {
 
 
 
-        //create two branches based on the predefined predicates:
+        //filter by language and create two branches based on the predefined predicates:
         KStream<String, Tweet>[] kStreams = stream.filter((k, v) -> (v.getLanguage().equals(EN)))
                 .branch(iPhoneSource, androidSource, notIPhoneOrAndroid);
 
-        kStreams[1].foreach((k, v)->
-                System.out.println(v.getSource()));
+       //using peek not to stop stream
+        kStreams[0].peek((k, v)->
+               System.out.println(v.getSource()));
 
 
         kStreams[1].foreach((k, v)->
