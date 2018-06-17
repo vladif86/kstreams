@@ -123,6 +123,7 @@ public class Tweet implements Identity {
         return tweet -> tweet.getSource().contains("Web");
     }
 
+    @JsonIgnore
     public DEVICES getDevice(){
         if (iphoneSource().test( this ))
             return DEVICES.IPHONE;

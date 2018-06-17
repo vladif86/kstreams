@@ -31,44 +31,43 @@ public class BranchTopology {
         tp.produceTweets(INPUT_TOPIC_NAME, QUERY);
 
         Properties config = new Properties();
-        config.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-first-tweet-ks");
+        config.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-first-tweet-ks4");
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TweetSerde.class);
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String,Tweet> stream = builder.stream(INPUT_TOPIC_NAME, Consumed.with(Serdes.String(), new TweetSerde()));
+        KStream<String, Tweet> stream = builder.stream(INPUT_TOPIC_NAME, Consumed.with(Serdes.String(), new TweetSerde()));
 
         //create two predicates for branch source of tweet
         //iPhone as a source
-        Predicate<String,Tweet> iPhoneSource = (s, tweet) -> tweet.getSource().contains("iPhone");
+        Predicate<String, Tweet> iPhoneSource = (s, tweet) -> tweet.getSource().contains("iPhone");
         //android as a source
-        Predicate<String,Tweet> androidSource =(s,tweet) -> tweet.getSource().contains("Android");
+        Predicate<String, Tweet> androidSource = (s, tweet) -> tweet.getSource().contains("Android");
 
-        Predicate<String,Tweet> notIPhoneOrAndroid =(s,tweet) -> ! (tweet.getSource().contains("Android") & tweet.getSource().contains("iPhone")) ;
+        Predicate<String, Tweet> notIPhoneOrAndroid = (s, tweet) -> !(tweet.getSource().contains("Android") & tweet.getSource().contains("iPhone"));
 
 
-
-        //filter by language and create two branches based on the predefined predicates:
+        //filter by language and create three branches based on the predefined predicates:
         KStream<String, Tweet>[] kStreams = stream.filter((k, v) -> (v.getLanguage().equals(EN)))
                 .branch(iPhoneSource, androidSource, notIPhoneOrAndroid);
 
-       //using peek not to stop stream
-        kStreams[0].peek((k, v)->
-               System.out.println(v.getSource()));
+        //using peek not to stop stream
+        kStreams[0].peek((k, v) ->
+                System.out.println(v.getSource() + " from iPhone stream"));
 
 
-        kStreams[1].foreach((k, v)->
-                System.out.println(v.getSource()));
+        kStreams[1].foreach((k, v) ->
+                System.out.println(v.getSource() + " from Android stream"));
 
-        kStreams[2].foreach((k, v)->
-                System.out.println(v.getSource()));
+        kStreams[2].foreach((k, v) ->
+                System.out.println(v.getSource() + " from Other sources stream"));
 
         kStreams[0].to(OUTPUTTOPIC1, Produced.with(Serdes.String(), new TweetSerde()));
 
-        KafkaStreams streams = new KafkaStreams(builder.build(),config);
+        KafkaStreams streams = new KafkaStreams(builder.build(), config);
 
         streams.start();
-   }
+    }
 
 }
