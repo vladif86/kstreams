@@ -4,7 +4,7 @@
 2. Verify the installation. Run *docker* or *docker-compose* command from your terminal
 3. In our workshop we're going to use Twitter API for the real-time data. So everyone should generate API keys and token to access the API.
 
-   Go to this [link](https://apps.twitter.com/app/new) Follow the instructions. 
+   Go to this [link](https://apps.twitter.com/app/new) (You need to be logged into your twitter account) Follow the instructions. 
    
    - In *Website* tab you can put any site URL, e.g. https://developer.twitter.com/
    - In *Callback URLs* click on *Add a Callback URL* button
@@ -31,6 +31,7 @@
  
  docker-compose will start all required containers for this workshop: Kafka and Zookeeper conatiners.
  
+ + git clone this repo
  + cd to  *./docker* folder
  + *docker-compose up -d*
  + check the docker are up and running : *docker ps*
