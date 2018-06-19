@@ -42,15 +42,6 @@ public class DevicesTopology {
         streams.start();
 
 
-
-
-
-
-
-
     }
-
-
-
 
 }

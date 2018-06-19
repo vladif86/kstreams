@@ -18,7 +18,7 @@ public class TweetSerializer implements Serializer<Tweet> {
 
     public byte[] serialize(String topic, Tweet data) {
 
-        byte[] retVal = null;
+        byte[] retVal ;
         try {
             retVal = objectMapper.writeValueAsString(data).getBytes();
         } catch (Exception e) {

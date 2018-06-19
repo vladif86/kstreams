@@ -19,15 +19,12 @@ public class TwittProducer extends BaseProducer{
         this.twitter = tf.getInstance();
         initProps();
         producer = new KafkaProducer(properties);
-
-
     }
 
-    public void produceTweets(String topic,String query) throws Exception{
-        for(Status status: searchTwitts(query)){
+    public void produceTweets(String topic, String query) throws Exception{
+        for(Status status : searchTwitts(query)){
                 produce( new Tweet(createUUID(), status), topic );
         }
-
     }
 
     public List<Status> searchTwitts(String queryString) throws Exception{
