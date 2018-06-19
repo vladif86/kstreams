@@ -1,8 +1,9 @@
 # Kafka Streams workshop
 ## Prerequisites 
 1. Install docker, CE (Community Edition). The installation instructions for Linux, Mac and Windows you can find [here](https://docs.docker.com/install/)
-2. Verify the installation. Run *docker* or *docker-compose* command from your terminal
-3. In our workshop we're going to use Twitter API for the real-time data. So everyone should generate API keys and token to access the API.
+2. Install docker compose [here](https://docs.docker.com/compose/install/).
+3. Verify the installation. Run *docker* , *docker-compose* commands from your terminal
+4. In our workshop we're going to use Twitter API for the real-time data. So everyone should generate API keys and token to access the API.
 
    Go to this [link](https://apps.twitter.com/app/new) (You need to be logged into your twitter account) Follow the instructions. 
    
@@ -19,7 +20,7 @@
    
    Save them in safe place on your laptop. We'll use all of them later on.
    
- 4. In addition to Twitter API we'll use [this API](https://www.alphavantage.co/) for real-time stock data
+ 5. In addition to Twitter API we'll use [this API](https://www.alphavantage.co/) for real-time stock data
  
     Open this link above and click on *Get your free API key today*. 
     
