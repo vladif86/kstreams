@@ -2,9 +2,16 @@ package com.fastfur.messaging.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import twitter4j.Status;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 
@@ -24,6 +31,39 @@ public class Tweet implements Identity {
     private String language;
     private String source;
 
+    private String rawTweetJson;
+    private long tweet_id;
+    private static final JsonPath TWEET_PARSER = JsonPath.compile("$");
+
+    /**
+     * This consturcture for using Twitter client without Twitter4j
+     * @param rawTweetJson
+     */
+    public Tweet(String rawTweetJson) {
+        this.rawTweetJson = rawTweetJson;
+        this.id = UUID.randomUUID().toString();
+
+        //Naive get of values:
+        LinkedHashMap tweet = TWEET_PARSER.read(rawTweetJson);
+        this.tweet_id = (long) tweet.getOrDefault("id",-1);
+        this.text = (String) tweet.getOrDefault("text","");
+        this.source = (String) tweet.getOrDefault("source","");
+        this.language = (String) tweet.getOrDefault("lang","");
+        this.favoriteCount = (int) tweet.getOrDefault("favorite_count",-1);
+        this.retweetCount = (int) tweet.getOrDefault("retweet_count",-1);
+        DateFormat df = new SimpleDateFormat("EEE MMM d HH:mm:ss Z yyyy");
+        try {
+            this.createdAt = df.parse((String) tweet.getOrDefault("created_at",""));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    protected String createUUID() {
+        String uuid  = UUID.randomUUID().toString();
+        return uuid;
+    }
 
     public Tweet(){}
 
