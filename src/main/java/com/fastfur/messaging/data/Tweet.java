@@ -11,10 +11,6 @@ import java.util.function.Predicate;
 
 public class Tweet implements Identity {
 
-    public enum DEVICES {
-        IPHONE, ANDROID, IPAD, WEB, ELSE
-    }
-
     @JsonProperty
     private String id;
     private int favoriteCount;
@@ -30,13 +26,11 @@ public class Tweet implements Identity {
     public Tweet(String id, Status status){
         this.id = id;
         this.favoriteCount = status.getFavoriteCount();
-        this.retweetCount =status.getRetweetCount();
-        this.text = status.getText();
+        this.retweetCount  = status.getRetweetCount();
+        this.text      = status.getText();
         this.createdAt = status.getCreatedAt();
-        this.language = status.getLang();
-        this.source= status.getSource();
-
-
+        this.language  = status.getLang();
+        this.source    = status.getSource();
     }
 
     public int getFavoriteCount() {
@@ -121,26 +115,6 @@ public class Tweet implements Identity {
 
     public  Predicate<Tweet> webSource() {
         return tweet -> tweet.getSource().contains("Web");
-    }
-
-    @JsonIgnore
-    public DEVICES getDevice(){
-        if (iphoneSource().test( this ))
-            return DEVICES.IPHONE;
-        else if (androidSource().test( this ))
-            return DEVICES.ANDROID;
-        else if (ipadSource().test( this ))
-            return DEVICES.IPAD;
-        else if (webSource().test( this ))
-            return DEVICES.WEB;
-        return DEVICES.ELSE;
-
-
-
-
-
-
-
     }
 
 

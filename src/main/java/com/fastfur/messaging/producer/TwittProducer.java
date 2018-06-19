@@ -21,23 +21,26 @@ public class TwittProducer extends BaseProducer{
         producer = new KafkaProducer(properties);
     }
 
-    public void produceTweets(String topic, String query) throws Exception{
-        for(Status status : searchTwitts(query)){
-                produce( new Tweet(createUUID(), status), topic );
+    public void produceTweets(String topic, List <String> queries) throws Exception{
+        for (String query : queries) {
+            for (Status status : searchTwitts(query)) {
+                produce(new Tweet(createUUID(), status), topic);
+            }
         }
     }
 
     public List<Status> searchTwitts(String queryString) throws Exception{
         Query query = new Query(queryString);
+        query.setCount(100);
         QueryResult result = twitter.search(query);
         return result.getTweets();
     }
 
-    public static void main(String[] args) throws Exception{
-        TwittProducer tp = new TwittProducer();
-        tp.produceTweets(TWITTER_ORIGINAL_TOPIC,"q=@realDonaldTrump");
-
-    }
+//    public static void main(String[] args) throws Exception{
+//        TwittProducer tp = new TwittProducer();
+//        tp.produceTweets(TWITTER_ORIGINAL_TOPIC,"q=@realDonaldTrump");
+//
+//    }
 
     public TwitterFactory init(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
