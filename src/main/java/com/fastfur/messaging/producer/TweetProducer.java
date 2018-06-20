@@ -8,13 +8,13 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.util.List;
 import java.util.Properties;
 
-public class TwittProducer extends BaseProducer{
+public class TweetProducer extends BaseProducer{
 
     public static String TWITTER_ORIGINAL_TOPIC="twitters";
 
     private Twitter twitter;
 
-    public TwittProducer(){
+    public TweetProducer(){
         TwitterFactory tf= init();
         this.twitter = tf.getInstance();
         initProps();
