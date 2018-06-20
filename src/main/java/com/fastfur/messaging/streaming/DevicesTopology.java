@@ -43,12 +43,12 @@ public class DevicesTopology {
 
         stream
                 .selectKey( (k, v) -> v.deviceFromSource() )
-                .to( DEVICE_TOPIC_NAME, Produced.with( Serdes.String(), new TweetSerde() );
+                .to( DEVICE_TOPIC_NAME, Produced.with( Serdes.String(), new TweetSerde() ));
 
         KTable<String, Long> deviceKtable = deviceStream.groupByKey().count();
 
 
-        deviceKtable.foreach( (k, v) -> System.out.println( "Device-> " + k + "number -> " + v ) );
+        deviceKtable.foreach( (k, v) -> System.out.println( "Device-> " + k + "  number -> " + v ) );
 
         KafkaStreams streams = new KafkaStreams( builder.build(), config );
         streams.start();
