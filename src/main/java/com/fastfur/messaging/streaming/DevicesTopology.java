@@ -26,33 +26,31 @@ public class DevicesTopology {
     public DevicesTopology() {
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         TweetProducer tp = new TweetProducer();
-        tp.produceTweets(INPUT_TOPIC_NAME, Queries.getQueries());
+        tp.produceTweets( INPUT_TOPIC_NAME, Queries.getQueries() );
 
         Properties config = new Properties();
-        config.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-first-tweet-ks1");
-        config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TweetSerde.class);
+        config.put( StreamsConfig.APPLICATION_ID_CONFIG, "my-first-tweet-ks1" );
+        config.put( StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092" );
+        config.put( StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName() );
+        config.put( StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TweetSerde.class );
 
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String,Tweet> stream = builder.stream(INPUT_TOPIC_NAME, Consumed.with(Serdes.String(), new TweetSerde()));
-        KStream<String,Tweet> deviceStream = builder.stream(DEVICE_TOPIC_NAME, Consumed.with(Serdes.String(), new TweetSerde()));
+        KStream<String, Tweet> stream = builder.stream( INPUT_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
+        KStream<String, Tweet> deviceStream = builder.stream( DEVICE_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
 
-                stream
-                .selectKey((k,v) -> v.deviceFromSource())
-                .to(DEVICE_TOPIC_NAME, Produced.with(Serdes.String(), new TweetSerde());
+        stream
+                .selectKey( (k, v) -> v.deviceFromSource() )
+                .to( DEVICE_TOPIC_NAME, Produced.with( Serdes.String(), new TweetSerde() );
 
-        KTable<String, Long>  deviceKtable= deviceStream.groupByKey().count();
-
-
+        KTable<String, Long> deviceKtable = deviceStream.groupByKey().count();
 
 
-        deviceKtable.foreach( (k,v) -> System.out.println( "Device-> " + k + "number -> " + v ) );
+        deviceKtable.foreach( (k, v) -> System.out.println( "Device-> " + k + "number -> " + v ) );
 
-        KafkaStreams streams = new KafkaStreams(builder.build(),config);
+        KafkaStreams streams = new KafkaStreams( builder.build(), config );
         streams.start();
 
 
