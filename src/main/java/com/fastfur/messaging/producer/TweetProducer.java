@@ -58,7 +58,6 @@ public class TweetProducer extends BaseProducer{
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "com.fastfur.messaging.serde.TweetSerializer");
         return properties;
-
     }
 
 }
