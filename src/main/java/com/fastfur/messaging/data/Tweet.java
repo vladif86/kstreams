@@ -157,5 +157,23 @@ public class Tweet implements Identity {
         return tweet -> tweet.getSource().contains("Web");
     }
 
+    @JsonIgnore
+    public String deviceFromSource(){
+        if(iphoneSource().test( this )){
+            return "iPhone";
+        }
+        else if(androidSource().test( this )){
+            return "Android";
+        }
+        else if(ipadSource().test( this )){
+            return "Ipad";
+        }
+        else if(webSource().test( this )){
+            return "Web";
+        }
+        return "else";
+
+    }
+
 
 }
