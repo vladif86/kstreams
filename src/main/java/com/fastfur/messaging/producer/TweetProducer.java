@@ -8,39 +8,39 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.util.List;
 import java.util.Properties;
 
-public class TwittProducer extends BaseProducer{
+public class TweetProducer extends BaseProducer{
 
     public static String TWITTER_ORIGINAL_TOPIC="twitters";
 
     private Twitter twitter;
 
-    public TwittProducer(){
+    public TweetProducer(){
         TwitterFactory tf= init();
         this.twitter = tf.getInstance();
         initProps();
         producer = new KafkaProducer(properties);
-
-
     }
 
-    public void produceTweets(String topic,String query) throws Exception{
-        for(Status status: searchTwitts(query)){
-                produce( new Tweet(createUUID(), status), topic );
+    public void produceTweets(String topic, List <String> queries) throws Exception{
+        for (String query : queries) {
+            for (Status status : searchTwitts(query)) {
+                produce(new Tweet(createUUID(), status), topic);
+            }
         }
-
     }
 
     public List<Status> searchTwitts(String queryString) throws Exception{
         Query query = new Query(queryString);
+        query.setCount(100);
         QueryResult result = twitter.search(query);
         return result.getTweets();
     }
 
-    public static void main(String[] args) throws Exception{
-        TwittProducer tp = new TwittProducer();
-        tp.produceTweets(TWITTER_ORIGINAL_TOPIC,"q=trump");
-
-    }
+//    public static void main(String[] args) throws Exception{
+//        TwittProducer tp = new TwittProducer();
+//        tp.produceTweets(TWITTER_ORIGINAL_TOPIC,"q=@realDonaldTrump");
+//
+//    }
 
     public TwitterFactory init(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -58,7 +58,6 @@ public class TwittProducer extends BaseProducer{
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "com.fastfur.messaging.serde.TweetSerializer");
         return properties;
-
     }
 
 }
