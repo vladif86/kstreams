@@ -38,7 +38,7 @@ public class TwittProducer extends BaseProducer{
 
     public static void main(String[] args) throws Exception{
         TwittProducer tp = new TwittProducer();
-        tp.produceTweets(TWITTER_ORIGINAL_TOPIC,"q=@realDonaldTrump");
+        tp.produceTweets(TWITTER_ORIGINAL_TOPIC,"q=trump");
 
     }
 
