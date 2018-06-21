@@ -1,6 +1,8 @@
-package com.fastfur.messaging.producer;
+package com.fastfur.messaging.producer.twitter;
 
 import com.fastfur.messaging.data.Tweet;
+import com.fastfur.messaging.producer.BaseProducer;
+import com.fastfur.messaging.producer.Queries;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
@@ -8,11 +10,10 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.util.List;
 import java.util.Properties;
 
-public class TweetProducer extends BaseProducer{
+public class TweetProducer extends BaseProducer {
 
-    public static String TWITTER_ORIGINAL_TOPIC="twitters";
 
-    private Twitter twitter;
+    protected Twitter twitter;
 
     public TweetProducer(){
         TwitterFactory tf= init();
@@ -36,11 +37,11 @@ public class TweetProducer extends BaseProducer{
         return result.getTweets();
     }
 
-//    public static void main(String[] args) throws Exception{
-//        TwittProducer tp = new TwittProducer();
-//        tp.produceTweets(TWITTER_ORIGINAL_TOPIC,"q=@realDonaldTrump");
-//
-//    }
+    public static void main(String[] args) throws Exception{
+        TweetProducer tp = new TweetProducer();
+        tp.produceTweets(TwitterTopics.TWITTERS_TOPIC, Queries.getQueries());
+
+    }
 
     public TwitterFactory init(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
