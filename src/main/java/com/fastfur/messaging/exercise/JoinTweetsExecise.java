@@ -10,6 +10,8 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.ValueJoiner;
+import org.omg.PortableInterceptor.LOCATION_FORWARD;
 
 import java.util.Properties;
 
@@ -33,18 +35,23 @@ public class JoinTweetsExecise {
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, Tweet> stream = builder.stream( INPUT_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
         KStream<String, Tweet> deviceStream = builder.stream( DEVICE_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
+        KStream<String, Tweet> d= stream
+                .join( deviceStream, new ValueJoiner<Tweet, Tweet, Long>() {
+                            @Override
+                            public Long apply(Tweet tweet, Tweet vt) {
+                                return 5l;
+                            }
+                        });
+//        (leftVal,rightVal) -> (leftVal.getCreatedAt() - rightVal)
 
-        stream
-                .selectKey( (k, v) -> v.getInReponseTo() )
-                .join( deviceStream,  (leftVal,rightVal) -> leftVal.getCreatedAt() - rightVal.getc);
 
-        KTable<String, Long> deviceKtable = deviceStream.groupByKey().count();
-
-
-        deviceKtable.foreach( (k, v) -> System.out.println( "Device-> " + k + "  number -> " + v ) );
 
         KafkaStreams streams = new KafkaStreams( builder.build(), config );
         streams.start();
+
+
+
+
 
 
     }
