@@ -27,6 +27,16 @@ public class Tweet implements Identity {
     private String language;
     private String source;
 
+    public long getInReponseTo() {
+        return inReponseTo;
+    }
+
+    public void setInReponseTo(long inReponseTo) {
+        this.inReponseTo = inReponseTo;
+    }
+
+    private long inReponseTo;
+
     private String rawTweetJson;
     private long tweet_id;
     private static final JsonPath TWEET_PARSER = JsonPath.compile("$");
@@ -71,6 +81,7 @@ public class Tweet implements Identity {
         this.createdAt = status.getCreatedAt();
         this.language  = status.getLang();
         this.source    = status.getSource();
+        this.inReponseTo = status.getInReplyToStatusId();
     }
 
     public int getFavoriteCount() {
