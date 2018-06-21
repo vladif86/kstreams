@@ -2,7 +2,7 @@ package com.fastfur.messaging.streaming;
 
 import com.fastfur.messaging.data.Tweet;
 import com.fastfur.messaging.producer.Queries;
-import com.fastfur.messaging.producer.TweetProducer;
+import com.fastfur.messaging.producer.twitter.TweetProducer;
 import com.fastfur.messaging.serde.TweetSerde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.Consumed;
