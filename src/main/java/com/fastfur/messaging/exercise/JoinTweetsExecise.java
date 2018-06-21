@@ -7,12 +7,10 @@ import org.apache.kafka.streams.Consumed;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Produced;
-import org.apache.kafka.streams.kstream.ValueJoiner;
+import org.apache.kafka.streams.kstream.*;
 import org.omg.PortableInterceptor.LOCATION_FORWARD;
 
+import java.time.Duration;
 import java.util.Properties;
 
 import static com.fastfur.messaging.streaming.DevicesTopology.DEVICE_TOPIC_NAME;
@@ -21,6 +19,12 @@ import static com.fastfur.messaging.streaming.DevicesTopology.INPUT_TOPIC_NAME;
 public class JoinTweetsExecise {
 
 
+    /**
+     * Get the most popular tweets in each language in the last 10 seconds. Take into account only tweets with more than 10 likes.
+     Possible implementation includes: filter, group by, and reduce with timewindow.
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 //        TweetProducer tp = new TweetProducer();
 //        tp.produceTweets( INPUT_TOPIC_NAME, Queries.getQueries() );
@@ -33,21 +37,22 @@ public class JoinTweetsExecise {
 
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, Tweet> stream = builder.stream( INPUT_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
-        KStream<String, Tweet> deviceStream = builder.stream( DEVICE_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
-        KStream<String, Tweet> d= stream
+        KStream<String, Tweet> stream = builder.stream( INPUT_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) ).;
+        KStream<Long, Tweet> deviceStream = builder.stream( DEVICE_TOPIC_NAME, Consumed.with( Serdes.Long(), new TweetSerde() ) );
+       stream.filter( (k,v) -> v.getInReponseTo()!= 0 )
+               .selectKey( (k,v) -> v.getInReponseTo() )
                 .join( deviceStream, new ValueJoiner<Tweet, Tweet, Long>() {
                             @Override
                             public Long apply(Tweet tweet, Tweet vt) {
-                                return 5l;
+                                return tweet.getInReponseTo() - vt.getInReponseTo();
                             }
-                        });
-//        (leftVal,rightVal) -> (leftVal.getCreatedAt() - rightVal)
+                        }, JoinWindows.of( Duration.ofDays( 30 ).toMillis() ) );
 
 
 
         KafkaStreams streams = new KafkaStreams( builder.build(), config );
         streams.start();
+
 
 
 
