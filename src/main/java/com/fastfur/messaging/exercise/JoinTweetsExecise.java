@@ -37,7 +37,7 @@ public class JoinTweetsExecise {
 
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, Tweet> stream = builder.stream( INPUT_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) ).;
+        KStream<String, Tweet> stream = builder.stream( INPUT_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
         KStream<Long, Tweet> deviceStream = builder.stream( DEVICE_TOPIC_NAME, Consumed.with( Serdes.Long(), new TweetSerde() ) );
        stream.filter( (k,v) -> v.getInReponseTo()!= 0 )
                .selectKey( (k,v) -> v.getInReponseTo() )
