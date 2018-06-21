@@ -1,7 +1,8 @@
 
-package com.fastfur.messaging.producer;
+package com.fastfur.messaging.producer.twitter;
 
 import com.fastfur.messaging.data.Tweet;
+import com.fastfur.messaging.producer.BaseProducer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
