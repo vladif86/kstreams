@@ -47,12 +47,9 @@ public class PopularTweetsExecise {
                     }
                 });
 
-        KTable<Windowed<String>, Tweet> longSums  =stream.groupBy( (k,v) -> v.getLanguage()).
-                reduce( (v1,v2 ) -> v1.getFavoriteCount() > v2.getFavoriteCount()? v1 : v2 ,TimeWindows.of( 60000L ).until( 60000L*10 ));
-
-
-
-
+        KTable<Windowed<String>, Tweet> longSums  =  stream.groupBy( (k,v) -> v.getLanguage())
+                .windowedBy( TimeWindows.of( 60000L ).until( 60000L*10 ) )
+                .reduce( (v1,v2 ) -> v1.getFavoriteCount() > v2.getFavoriteCount()? v1 : v2 );
         longSums.foreach( (k, v) -> System.out.println( "start -> " + k.window().start() +  "  key -> " + k.key() ) );
 
         KafkaStreams streams = new KafkaStreams( builder.build(), config );
