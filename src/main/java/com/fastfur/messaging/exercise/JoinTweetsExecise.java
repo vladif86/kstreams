@@ -1,6 +1,7 @@
 package com.fastfur.messaging.exercise;
 
 import com.fastfur.messaging.data.Tweet;
+import com.fastfur.messaging.producer.twitter.TwitterTopics;
 import com.fastfur.messaging.serde.TweetSerde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.Consumed;
@@ -13,8 +14,7 @@ import org.omg.PortableInterceptor.LOCATION_FORWARD;
 import java.time.Duration;
 import java.util.Properties;
 
-import static com.fastfur.messaging.streaming.DevicesTopology.DEVICE_TOPIC_NAME;
-import static com.fastfur.messaging.streaming.DevicesTopology.INPUT_TOPIC_NAME;
+
 
 public class JoinTweetsExecise {
 
@@ -26,8 +26,7 @@ public class JoinTweetsExecise {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-//        TweetProducer tp = new TweetProducer();
-//        tp.produceTweets( INPUT_TOPIC_NAME, Queries.getQueries() );
+
 
         Properties config = new Properties();
         config.put( StreamsConfig.APPLICATION_ID_CONFIG, "my-first-tweet-ks1" );
@@ -37,8 +36,8 @@ public class JoinTweetsExecise {
 
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, Tweet> stream = builder.stream( INPUT_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
-        KStream<Long, Tweet> deviceStream = builder.stream( DEVICE_TOPIC_NAME, Consumed.with( Serdes.Long(), new TweetSerde() ) );
+        KStream<String, Tweet> stream = builder.stream( TwitterTopics.TWITTERS_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
+        KStream<Long, Tweet> deviceStream = builder.stream( TwitterTopics.GOT_RESPONDED_TOPIC, Consumed.with( Serdes.Long(), new TweetSerde() ) );
        stream.filter( (k,v) -> v.getInReponseTo()!= 0 )
                .selectKey( (k,v) -> v.getInReponseTo() )
                 .join( deviceStream, new ValueJoiner<Tweet, Tweet, Long>() {
