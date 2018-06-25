@@ -1,6 +1,7 @@
 package com.fastfur.messaging.exercise.solution;
 
 import com.fastfur.messaging.data.Tweet;
+import com.fastfur.messaging.producer.twitter.TwitterTopics;
 import com.fastfur.messaging.serde.TweetSerde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.Consumed;
@@ -9,13 +10,9 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.JoinWindows;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.ValueJoiner;
-
-import java.time.Duration;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import static com.fastfur.messaging.streaming.DevicesTopology.DEVICE_TOPIC_NAME;
-import static com.fastfur.messaging.streaming.DevicesTopology.INPUT_TOPIC_NAME;
 
 public class JoinTweetsSolution {
     public static void main(String[] args) throws Exception {
@@ -27,16 +24,12 @@ public class JoinTweetsSolution {
 
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, Tweet> stream = builder.stream( INPUT_TOPIC_NAME, Consumed.with( Serdes.String(), new TweetSerde() ) );
-        KStream<Long, Tweet> deviceStream = builder.stream( DEVICE_TOPIC_NAME, Consumed.with( Serdes.Long(), new TweetSerde() ) );
-        stream.filter( (k, v) -> v.getInReponseTo() != 0 )
-                .selectKey( (k, v) -> v.getInReponseTo() )
-                .join( deviceStream, new ValueJoiner<Tweet, Tweet, Long>() {
-                    @Override
-                    public Long apply(Tweet tweet, Tweet vt) {
-                        return tweet.getInReponseTo() - vt.getInReponseTo();
-                    }
-                }, JoinWindows.of( Duration.ofDays( 30 ).toMillis() ) );
+        KStream<String, Tweet> stream = builder.stream( TwitterTopics.TWITTERS_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
+        KStream<String, Tweet> deviceStream = builder.stream( TwitterTopics.GOT_RESPONDED_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
+        stream.filter( (k, v) -> v.getInReponseTo() != -1 )
+                .selectKey( (k, v) -> String.valueOf( v.getInReponseTo() ) )
+                .join( deviceStream, (left, right) -> TimeUnit.MILLISECONDS.toSeconds( left.getCreatedAt().getTime() - right.getCreatedAt().getTime() ), JoinWindows.of( 300000 ).before( 600000 ).until( 3600000 ) )
+                .foreach( (k, v) -> System.out.println( "key" + k.toString() + " value : " + v ) );
 
 
         KafkaStreams streams = new KafkaStreams( builder.build(), config );
