@@ -26,14 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 public class EncryptAndRemoveTweet {
 
-    public static void main(String[] args) throws NoSuchAlgorithmException,
-    InvalidKeySpecException,
-    NoSuchPaddingException,
-    InvalidKeyException,
-    InvalidAlgorithmParameterException,
-    UnsupportedEncodingException,
-    IllegalBlockSizeException,
-    BadPaddingException
+    public static void main(String[] args)
 
     {
         Properties config = new Properties();
@@ -41,21 +34,21 @@ public class EncryptAndRemoveTweet {
         config.put( StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092" );
         config.put( StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName() );
         config.put( StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, TweetSerde.class );
-        CryptoUtil cryptoUtil=new CryptoUtil();
-        String key="ezeon8547";
-
+        CryptoUtil cryptoUtil = new CryptoUtil();
+        String key = "ezeon8547";
 
 
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, Tweet> stream = builder.stream( TwitterTopics.TWITTERS_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
         KStream<String, Tweet> deviceStream = builder.stream( TwitterTopics.GOT_RESPONDED_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
         stream.merge( deviceStream )
-                .mapValues( ( v) -> {
+                .mapValues( (v) -> {
 
                     v.setText( cryptoUtil.encrypt( key, v.getText() ) );
                     v.setDecoded( true );
                     return v;
-                }).to(TwitterTopics.ENCODE_TWEETS, Produced.with(Serdes.String(), new TweetSerde())) ;
+                } ).
+                to( TwitterTopics.ENCODE_TWEETS, Produced.with( Serdes.String(), new TweetSerde() ) );
 
 
         KafkaStreams streams = new KafkaStreams( builder.build(), config );
