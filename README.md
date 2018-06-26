@@ -54,8 +54,7 @@
        outputtopic3
        twitters
    
-   
- 
+ Looks like we're ready to go...
  
  
      
