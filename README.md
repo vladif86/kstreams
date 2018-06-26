@@ -47,8 +47,6 @@
        docker exec -i -t kafka-container-id /bin/bash
        $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper zk-IP
        
-       for example : $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper 172.18.0.2
-       
   It should print list of topics like that : 
   
        outputtopic1
@@ -57,6 +55,16 @@
        twitters
    
  Looks like we're ready to go...
+ 
+ ### Kafka Consumers
+ We need to start Kafka consumer on the topics of our interest
+ To do that run, inside of kafka container: 
+      
+      $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server 172.18.0.3:9092 --topic twitters --from-beginning
+      
+   
+ 
+ 
  
  
      
