@@ -27,7 +27,7 @@
     Follow the instructions and get the key and save it.
     
     
- ## Docker Compose
+ ### Docker Compose
  In this workshop we'll use docker-compose to create our dockerized development environment.
  
  docker-compose will start all required containers for this workshop: Kafka and Zookeeper conatiners.
@@ -47,6 +47,8 @@
        docker exec -i -t kafka-container-id /bin/bash
        $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper zk-IP
        
+       for example : $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper 172.18.0.2
+       
   It should print list of topics like that : 
   
        outputtopic1
@@ -54,8 +56,7 @@
        outputtopic3
        twitters
    
-   
- 
+ Looks like we're ready to go...
  
  
      
