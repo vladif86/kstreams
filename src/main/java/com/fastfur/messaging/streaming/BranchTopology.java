@@ -13,7 +13,6 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Predicate;
 import org.apache.kafka.streams.kstream.Produced;
 
-import java.util.Arrays;
 import java.util.Properties;
 
 
@@ -52,18 +51,18 @@ public class BranchTopology {
                 .branch(iPhoneSource, androidSource, notIPhoneOrAndroid);
 
         //using peek not to stop stream
-//        kStreams[0].peek((k, v) ->
-//                System.out.println(v.getSource() + " from iPhone stream"));
+        kStreams[0].peek((k, v) ->
+                System.out.println(v.getSource() + " from iPhone stream"));
 
-        kStreams[0].mapValues(v-> v.getText()).flatMapValues( v -> Arrays.asList(v.split("\\W+"))).print(); //.groupBy((k,v)-> v).count().print();
+  //      kStreams[0].mapValues(v-> v.getText()).flatMapValues( v -> Arrays.asList(v.split("\\W+"))).print(); //.groupBy((k,v)-> v).count().print();
 
 
 
-//        kStreams[1].foreach((k, v) ->
-//                System.out.println(v.getSource() + " from Android stream"));
-//
-//        kStreams[2].foreach((k, v) ->
-//                System.out.println(v.getSource() + " from Other sources stream"));
+        kStreams[1].foreach((k, v) ->
+                System.out.println(v.getSource() + " from Android stream"));
+
+        kStreams[2].foreach((k, v) ->
+                System.out.println(v.getSource() + " from Other sources stream"));
 
         kStreams[0].to(OUTPUTTOPIC1, Produced.with(Serdes.String(), new TweetSerde()));
 
