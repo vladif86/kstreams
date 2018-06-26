@@ -33,8 +33,8 @@ public class BaseProducer {
 
     public Properties initProps(){
         properties = new Properties();
-        properties.put("bootstrap.servers", "127.0.0.1:9092");
-        properties.put("acks", "all");
+        properties.put("bootstrap.servers", "localhost:9092");
+        properties.put("acks", "1");
         properties.put("retries", 10);
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         return properties;

@@ -5,16 +5,15 @@ import com.fastfur.messaging.producer.Queries;
 import com.fastfur.messaging.producer.twitter.TweetProducer;
 import com.fastfur.messaging.serde.TweetSerde;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.Consumed;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Predicate;
 import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.Serialized;
 
 import java.util.Arrays;
 import java.util.Properties;
+
 
 
 public class BranchTopology {
@@ -22,6 +21,7 @@ public class BranchTopology {
     public static final String INPUT_TOPIC_NAME = "twitters";
     public static final String EN = "en";
     public static final String OUTPUTTOPIC1 = "outputtopic1";
+    public static final String OUTPUTTOPIC2 = "outputtopic2";
 
 
     public static void main(String[] args) throws Exception {
@@ -51,13 +51,22 @@ public class BranchTopology {
         KStream<String, Tweet>[] kStreams = stream.filter((k, v) -> (v.getLanguage().equals(EN)))
                 .branch(iPhoneSource, androidSource, notIPhoneOrAndroid);
 
+        //count transforms stream to KTable
+        //we can turn KTable back to stream. This table - stream duality
+        //in this case we get a stream where key is a word and value is counter ( type long )
+
+        kStreams[0].
+                mapValues(v-> v.getText()).
+                    flatMapValues( v -> Arrays.asList(v.split("\\W+"))).
+                         mapValues(v-> v.toLowerCase()).
+                            groupBy((k,v)-> v, Serialized.with(Serdes.String(),Serdes.String())).count().
+                               toStream().map(( word,count) -> org.apache.kafka.streams.KeyValue.pair(word,count)).
+                                 to(OUTPUTTOPIC2,Produced.with(Serdes.String(), Serdes.Long()));
+        
+
         //using peek not to stop stream
 //        kStreams[0].peek((k, v) ->
 //                System.out.println(v.getSource() + " from iPhone stream"));
-
-        kStreams[0].mapValues(v-> v.getText()).flatMapValues( v -> Arrays.asList(v.split("\\W+"))).print(); //.groupBy((k,v)-> v).count().print();
-
-
 
 //        kStreams[1].foreach((k, v) ->
 //                System.out.println(v.getSource() + " from Android stream"));
@@ -65,11 +74,14 @@ public class BranchTopology {
 //        kStreams[2].foreach((k, v) ->
 //                System.out.println(v.getSource() + " from Other sources stream"));
 
-        kStreams[0].to(OUTPUTTOPIC1, Produced.with(Serdes.String(), new TweetSerde()));
+
+         kStreams[0].to(OUTPUTTOPIC1, Produced.with(Serdes.String(), new TweetSerde()));
+
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
 
         streams.start();
     }
+
 
 }
