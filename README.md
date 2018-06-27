@@ -100,13 +100,23 @@
   	 https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/TimeWindows.html
   	 https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KGroupedStream.html
   
-   3.Level: Medium . Producer - - JoinTweetsExercise.
+  3.Level: Medium . Producer - - JoinTweetsExercise.
    In this exercise you will have to calculate the time difference 
    between a response to a tweet and the original tweet.
    Hints: 
     https://docs.confluent.io/current/streams/concepts.html#joins
     https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html
-   
+  4. Level: Medium- BranchTopology. Producer -  TweetProducer
+    In this Exercise you will have to Listens to tweet,
+    filter only english tweets, branch by predicates to different 
+    topics by device and print it.
+    Hints: 
+        https://kafka.apache.org/10/javadoc/org/apache/kafka/streams/kstream/KStream.html
+        
+  
+        
+
+     
     
         
      
