@@ -92,7 +92,7 @@
      https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html
      https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KStreamBuilder.html
      
-  2.level : Medium . Producer -  TweetProducer 
+  2.level : Medium - PopularTweets. Producer -  TweetProducer 
    In this exercise you will have to implement a topology that will print the most popular
    tweet in each minute for each language. The time window should be for the last 10 minutes.
    Filter the tweets such that only tweets with 10 likes and above are passed
@@ -100,7 +100,7 @@
   	 https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/TimeWindows.html
   	 https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KGroupedStream.html
   
-  3.Level: Medium . Producer -  JoinTweetsExercise.
+  3.Level: Medium -  JoinTweets. Producer -  TweetWithResponseProducer.
    In this exercise you will have to calculate the time difference 
    between a response to a tweet and the original tweet.
    Hints: 
