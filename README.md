@@ -47,8 +47,6 @@
        docker exec -i -t kafka-container-id /bin/bash
        $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper zk-IP
        
-       for example : $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper 172.18.0.2
-       
   It should print list of topics like that : 
   
        outputtopic1
@@ -57,6 +55,67 @@
        twitters
    
  Looks like we're ready to go...
+ 
+ ### Kafka consumer
+ We need to start Kafka consumer on the topics of our interest.
+ 
+ To do that run, inside of kafka container: 
+      
+      $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server 172.18.0.3:9092 --topic twitters --from-beginning
+      
+ When we start Kafka Streams topology we supposed to see here a stream of incoming data  
+ 
+ Open second terminal get into Kafka container and run Kafka console consumer
+ 
+ This is the output topic where we write to the processed original stream 
+ 
+      $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server 172.18.0.3:9092 \
+            --topic outputtopic2 \
+            --from-beginning \
+            --formatter kafka.tools.DefaultMessageFormatter \
+            --property print.key=true \
+            --property print.value=true \
+            --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
+            --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
+      
+      
+      
+    ________________________
+    
+  1.Level : Easy - EncryptTweet. Producer - TweetWithResponseProducer
+   In this execrise you will have to encrypt tweets(text field only) from two topics :
+   encode_tweets & got_responded, and then stream it. Affter the transformation,
+   push the result to the encode_tweets topic.
+   For your convenience you can use  the CryptoUtil Class.
+   Hints: 
+    useful transformations and tools may be found here :
+     https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html
+     https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KStreamBuilder.html
+     
+  2.level : Medium . Producer -  TweetProducer 
+   In this exercise you will have to implement a topology that will print the most popular
+   tweet in each minute for each language. The time window should be for the last 10 minutes.
+   Filter the tweets such that only tweets with 10 likes and above are passed
+   Hints:
+  	 https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/TimeWindows.html
+  	 https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KGroupedStream.html
+  
+
+        
+     
+      
+      
+      
+      
+      
+      
+      
+      
+         
+      
+   
+ 
+ 
  
  
      
