@@ -67,7 +67,32 @@
  
  This is the output topic where we write to the processed original stream 
  
-      $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server 172.18.0.3:9092 --topic outputtopic2      
+      $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server 172.18.0.3:9092 --topic outputtopic2 
+      
+      
+      
+    ________________________
+    
+  1.Level : Easy - EncryptTweet. Producer - TweetWithResponseProducer
+   In this execrise you will have to encrypt tweets(text field only) from two topics :
+   encode_tweets & got_responded, and then stream it. Affter the transformation,
+   push the result to the encode_tweets topic.
+   For your convenience you can use  the CryptoUtil Class.
+   Hints: 
+    useful transformations and tools may be found here :
+     https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html
+     https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KStreamBuilder.html
+        
+     
+      
+      
+      
+      
+      
+      
+      
+      
+         
       
    
  
