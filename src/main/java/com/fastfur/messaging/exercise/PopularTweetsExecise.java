@@ -35,7 +35,6 @@ public class PopularTweetsExecise {
 
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, Tweet> stream = builder.stream( TwitterTopics.TWITTERS_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
-        stream.foreach((k, v) -> System.out.println( "start -> " +k.toString() + "   key -> " + v.toString() )  );
         KTable<Windowed<String>, Tweet> longSums  =
                 stream.filter((k,v) ->  v.getFavoriteCount() > 10)
                 .groupBy( (k,v) -> v.getLanguage())
