@@ -67,7 +67,14 @@
  
  This is the output topic where we write to the processed original stream 
  
-      $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server 172.18.0.3:9092 --topic outputtopic2 
+      $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server 172.18.0.3:9092 \
+            --topic outputtopic2 \
+            --from-beginning \
+            --formatter kafka.tools.DefaultMessageFormatter \
+            --property print.key=true \
+            --property print.value=true \
+            --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
+            --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
       
       
       
