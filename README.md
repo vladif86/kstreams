@@ -83,7 +83,7 @@
     ________________________
     
   1.Level : Easy - EncryptTweet. Producer - TweetWithResponseProducer
-   In this execrise you will have to encrypt tweets(text field only) from two topics :
+   In this exercise you will have to encrypt tweets(text field only) from two topics :
    encode_tweets & got_responded, and then stream it. Affter the transformation,
    push the result to the encode_tweets topic.
    For your convenience you can use  the CryptoUtil Class.
