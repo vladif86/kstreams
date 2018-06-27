@@ -18,7 +18,7 @@ public class BaseProducer {
 
         producer.send(new ProducerRecord(topic, record.getKey(), record));
         try {
-            Thread.sleep(100);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e.getMessage());
         }

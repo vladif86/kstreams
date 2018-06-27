@@ -17,10 +17,15 @@ public class TweetWithReponseProducer extends TweetProducer {
     public void produceTweets(String[] queries) throws Exception {
         for (String query : queries) {
             for (Status status : searchTweets( query )) {
+
                 produce( new Tweet( String.valueOf( status.getId() ), status ), TwitterTopics.TWITTERS_TOPIC );
                 if (status.getInReplyToStatusId() != -1) {
                     long statusId = status.getInReplyToStatusId();
-                    produce( new Tweet( String.valueOf( statusId ), twitter.showStatus( statusId ) ), TwitterTopics.GOT_RESPONDED_TOPIC );
+                    try {
+                        produce( new Tweet( String.valueOf( statusId ), twitter.showStatus( statusId ) ), TwitterTopics.GOT_RESPONDED_TOPIC );
+                    } catch (Exception ex) {
+                        System.out.println( "error while trying to get status : " + statusId );
+                    }
                 }
             }
         }
