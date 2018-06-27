@@ -21,7 +21,7 @@ import java.util.Properties;
  * In this Exercise you will have to Listens to tweet,
  * filter only english tweets, branch by predicates to different topics by device and print it
  */
-public class BranchTopologySolution {
+public class BranchTopologyExercise {
 
     public static final String INPUT_TOPIC_NAME = "twitters";
     public static final String EN = "en";
