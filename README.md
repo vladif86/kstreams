@@ -91,9 +91,8 @@
    encode_tweets & got_responded, and then stream it. After the transformation,
    push the result to the encode_tweets topic.
    For your convenience you can use  the CryptoUtil Class.
-   
-   **Hints:** 
-    useful transformations and tools may be found here :
+   ####Hints: 
+     useful transformations and tools may be found here :
      + [KStream](https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html)
      + [KStreamBuilder](https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KStreamBuilder.html)
      
@@ -101,32 +100,28 @@
    In this exercise you will have to implement a topology that will print the most popular
    tweet in each minute for each language. The time window should be for the last 10 minutes.
    Filter the tweets such that only tweets with 10 likes and above are passed
-   
-   **Hints:**  	 
+   ####Hints:  	 
      + [TimeWindows](https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/TimeWindows.html)
      + [KGroupedStream](https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KGroupedStream.html)
   
   3. **Level: Medium. Producer - JoinTweetsExercise**
    In this exercise you will have to calculate the time difference 
    between a response to a tweet and the original tweet
-   
-   **Hints:** 
-    + [joins](https://docs.confluent.io/current/streams/concepts.html#joins)
-    + [KStream](https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html)
+   ####Hints: 
+     + [joins](https://docs.confluent.io/current/streams/concepts.html#joins)
+     + [KStream](https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html)
     
   4. **Level: Medium- BranchTopology. Producer -  TweetProducer**
     In this Exercise you will have to Listens to tweet,
     filter only english tweets, branch by predicates to different 
     topics by device and print it.
-    
-    **Hints:** 
+    ####Hints: 
      + [KStream](https://kafka.apache.org/10/javadoc/org/apache/kafka/streams/kstream/KStream.html)
         
   5. **Level: Easy - DevicesTopology. Producer - TweetProducer.**
     In this exercise you will have to count number of tweets created 
     by each device type(Iphone, Android etc..)
-    
-    **Hints:** 
+    ####Hints: 
      + [KGroupedStream](https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KGroupedStream.html)
      + [KStream](https://kafka.apache.org/10/javadoc/org/apache/kafka/streams/kstream/KStream.html)
 
