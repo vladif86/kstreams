@@ -91,6 +91,7 @@
    encode_tweets & got_responded, and then stream it. After the transformation,
    push the result to the encode_tweets topic.
    For your convenience you can use  the CryptoUtil Class.
+   
    ... **Hints:** 
      ...useful transformations and tools may be found here :
      ..* [KStream](https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html)
