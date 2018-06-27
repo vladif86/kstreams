@@ -100,7 +100,7 @@
   	 https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/TimeWindows.html
   	 https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KGroupedStream.html
   
-   3.Level: Medium - JoinTweetsExercise.
+   3.Level: Medium . Producer - - JoinTweetsExercise.
    In this exercise you will have to calculate the time difference 
    between a response to a tweet and the original tweet.
    Hints: 
