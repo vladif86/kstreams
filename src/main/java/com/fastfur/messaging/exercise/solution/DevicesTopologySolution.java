@@ -1,4 +1,4 @@
-package com.fastfur.messaging.streaming;
+package com.fastfur.messaging.exercise.solution;
 
 import com.fastfur.messaging.data.Tweet;
 import com.fastfur.messaging.producer.Queries;
@@ -17,11 +17,11 @@ import org.apache.kafka.streams.kstream.Produced;
 import java.util.Properties;
 
 
-public class DevicesTopology {
+public class DevicesTopologySolution {
 
 
 
-    public DevicesTopology() {
+    public DevicesTopologySolution() {
     }
 
     public static void main(String[] args) throws Exception {
