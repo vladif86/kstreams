@@ -1,4 +1,4 @@
-package com.fastfur.messaging.streaming;
+package com.fastfur.messaging.exercise.solution;
 
 import com.fastfur.messaging.data.Tweet;
 import com.fastfur.messaging.producer.Queries;
@@ -16,7 +16,7 @@ import java.util.Properties;
 
 
 
-public class BranchTopology {
+public class BranchTopologySolution {
 
     public static final String INPUT_TOPIC_NAME = "twitters";
     public static final String EN = "en";

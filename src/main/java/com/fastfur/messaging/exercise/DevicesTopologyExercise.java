@@ -14,6 +14,10 @@ import org.apache.kafka.streams.kstream.Produced;
 
 import java.util.Properties;
 
+/**
+ * In this exercise you will have to implement topology that will
+ * count the how much times each device type used to creat the tweets
+ */
 public class DevicesTopologyExercise {
     public static void main(String[] args) throws Exception {
         Properties config = new Properties();

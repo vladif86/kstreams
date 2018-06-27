@@ -20,7 +20,6 @@ import java.util.Properties;
 public class DevicesTopologySolution {
 
 
-
     public DevicesTopologySolution() {
     }
 
@@ -36,10 +35,9 @@ public class DevicesTopologySolution {
         KStream<String, Tweet> deviceStream = builder.stream( TwitterTopics.DEVICES_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
 
 
-
         stream
                 .selectKey( (k, v) -> v.deviceFromSource() )
-                .to( TwitterTopics.DEVICES_TOPIC, Produced.with( Serdes.String(), new TweetSerde() ));
+                .to( TwitterTopics.DEVICES_TOPIC, Produced.with( Serdes.String(), new TweetSerde() ) );
 
         KTable<String, Long> deviceKtable = deviceStream.groupByKey().count();
 
