@@ -91,10 +91,10 @@
    encode_tweets & got_responded, and then stream it. After the transformation,
    push the result to the encode_tweets topic.
    For your convenience you can use  the CryptoUtil Class.
-   ####Hints: 
-     useful transformations and tools may be found here :
-     + [KStream](https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html)
-     + [KStreamBuilder](https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KStreamBuilder.html)
+   ... **Hints:** 
+     ...useful transformations and tools may be found here :
+     ..* [KStream](https://kafka.apache.org/0110/javadoc/org/apache/kafka/streams/kstream/KStream.html)
+     ..* [KStreamBuilder](https://kafka.apache.org/0102/javadoc/org/apache/kafka/streams/kstream/KStreamBuilder.html)
      
   2. **level : Medium. Producer -  TweetProducer** 
    In this exercise you will have to implement a topology that will print the most popular
