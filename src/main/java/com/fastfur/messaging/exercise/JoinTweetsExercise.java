@@ -16,7 +16,7 @@ import java.util.Properties;
 
 
 
-public class JoinTweetsExecise {
+public class JoinTweetsExercise {
 
 
     /**
