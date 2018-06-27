@@ -37,11 +37,10 @@ public class EncryptAndRemoveTweet {
         CryptoUtil cryptoUtil = new CryptoUtil();
         String key = "ezeon8547";
 
-
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, Tweet> stream = builder.stream( TwitterTopics.TWITTERS_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
-        KStream<String, Tweet> deviceStream = builder.stream( TwitterTopics.GOT_RESPONDED_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
-        stream.merge( deviceStream )
+        KStream<String, Tweet> responseStream = builder.stream( TwitterTopics.GOT_RESPONDED_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
+        stream.merge( responseStream )
                 .mapValues( (v) -> {
 
                     v.setText( cryptoUtil.encrypt( key, v.getText() ) );

@@ -21,12 +21,6 @@ import java.util.Properties;
 public class PopularTweetsExecise {
 
 
-
-
-
-
-
-
     public static void main(String[] args) throws Exception {
 
 
