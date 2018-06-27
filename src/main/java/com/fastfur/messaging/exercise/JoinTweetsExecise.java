@@ -20,8 +20,8 @@ public class JoinTweetsExecise {
 
 
     /**
-     * Get the most popular tweets in each language in the last 10 seconds. Take into account only tweets with more than 10 likes.
-     Possible implementation includes: filter, group by, and reduce with timewindow.
+     In this exercise you will have to calculate the time difference
+     between a response to a tweet and the original tweet.
      * @param args
      * @throws Exception
      */
@@ -38,14 +38,10 @@ public class JoinTweetsExecise {
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, Tweet> stream = builder.stream( TwitterTopics.TWITTERS_TOPIC, Consumed.with( Serdes.String(), new TweetSerde() ) );
         KStream<Long, Tweet> deviceStream = builder.stream( TwitterTopics.GOT_RESPONDED_TOPIC, Consumed.with( Serdes.Long(), new TweetSerde() ) );
-       stream.filter( (k,v) -> v.getInReponseTo()!= 0 )
-               .selectKey( (k,v) -> v.getInReponseTo() )
-                .join( deviceStream, new ValueJoiner<Tweet, Tweet, Long>() {
-                            @Override
-                            public Long apply(Tweet tweet, Tweet vt) {
-                                return tweet.getInReponseTo() - vt.getInReponseTo();
-                            }
-                        }, JoinWindows.of( Duration.ofDays( 30 ).toMillis() ) );
+        /**
+         .foreach( (k, v) -> System.out.println( "key" + k.toString() + " value : " + v ) );
+         */
+
 
 
 
